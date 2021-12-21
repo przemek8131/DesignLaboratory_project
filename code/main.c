@@ -77,10 +77,10 @@ void react(void){
 		case Button_4:
 			PORTD ^= (1 << 5);
 		break;
-		case Power_OFF:
+		case Power_ON:
 			PORTD &= ~((1 << 2) | (1 << 3) | (1 << 4) | (1 << 5));
 		break;
-		case Power_ON:
+		case Power_OFF:
 		PORTD = ((1 << 2) | (1 << 3) | (1 << 4) | (1 << 5));
 		break;
 	}
@@ -88,6 +88,7 @@ void react(void){
 
 void relays_init(void){
 	DDRD = (1 << 2) | (1 << 3) | (1 << 4) | (1 << 5);
+	PORTD = (1 << 2) | (1 << 3) | (1 << 4) | (1 << 5);
 }
 
 ISR(TIMER1_CAPT_vect){
