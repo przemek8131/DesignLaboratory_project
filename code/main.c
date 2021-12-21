@@ -18,7 +18,8 @@
 #define Button_7 66
 #define Button_8 82
 #define Button_9 74
-#define Power_OFF 69
+#define Power_OFF 69	//button ch-
+#define Power_ON 70		//button ch+
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -79,6 +80,9 @@ void react(void){
 		case Power_OFF:
 			PORTD &= ~((1 << 2) | (1 << 3) | (1 << 4) | (1 << 5));
 		break;
+		case Power_ON:
+		PORTD = ((1 << 2) | (1 << 3) | (1 << 4) | (1 << 5));
+		break;
 	}
 }
 
@@ -124,6 +128,7 @@ int main(void)
 			_delay_ms(200);		/* w przypadku odebrania jedynie fragmentu sygna³u przy ponownym wciœniêciu przycisku odebrana zosta³aby nie pe³na wiadomoœæ, 
 								   a kolejne przerwania inkrementowa³yby niepoprawnie licznik, opóŸnienie powoduje pominiêcie wiêkszej liczby przerwañ ni¿ 34, 
 								   licznik zostanie poprawnie wyzerowany i nastêpna komenda bêdzie poprawnie odebrana*/
+			
 			if (4500 <= pomiary[1] && pomiary[1] <= 5500){    //sprawdzenie czy rozpoznana zosta³a poprawna sekwencja, pierwszy czas to odstêp pomiêdzy kolejnymi komendami
 				for(int i = 18; i < 26; i++){
 					if(900 <= pomiary[i] && pomiary[i] <=1500){
@@ -151,7 +156,7 @@ int main(void)
 						break;
 					}
 				}
-				if((!error) && (komenda == komenda_negacja)){
+				if((!error) && (komenda == komenda_negacja)){			//sprwadzenie czy zosta³a odczytana poprawna komenda
 					react();
 					sprintf(rx_buf,"%d\n\r",komenda);
 					uart_puts(rx_buf);
@@ -165,7 +170,10 @@ int main(void)
 			flaga = 0;
 			sprintf(rx_buf,"-------\n\r");
 			uart_puts(rx_buf);	
-			//if(flaga==1){		//wyswietlanie wszystkich pomiarow
+			
+			//wyswietlanie wszystkich pomiarow
+			
+			//if(flaga==1){		
 			/*for(int i = 0;i < 34;i++){
 			sprintf(rx_buf,"%d\n\r",pomiary[i]);
 			uart_puts(rx_buf);
@@ -174,6 +182,7 @@ int main(void)
 			sprintf(rx_buf,"------\n\r");
 			uart_puts(rx_buf);
 			//flaga = 0;*/
+		
 		}
 	}
 }
